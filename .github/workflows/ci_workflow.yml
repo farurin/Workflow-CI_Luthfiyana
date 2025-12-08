@@ -20,8 +20,8 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          # FIX 1: Install setuptools agar error pkg_resources hilang
-          pip install setuptools wheel
+          # Install setuptools
+          pip install --upgrade setuptools wheel
 
           # Install library utama
           pip install mlflow==2.14.1 dagshub scikit-learn pandas numpy matplotlib seaborn
@@ -34,4 +34,5 @@ jobs:
           DAGSHUB_USER_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
         run: |
           cd MLProject
+          # Kita pakai --env-manager=local agar menggunakan library yang baru saja diinstall di atas
           mlflow run . --env-manager=local
