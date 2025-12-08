@@ -1,0 +1,7 @@
+dagshub
+matplotlib
+mlflow==2.14.1
+numpy
+pandas
+scikit-learn
+seaborn

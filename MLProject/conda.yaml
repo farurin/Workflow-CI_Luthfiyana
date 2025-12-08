@@ -1,0 +1,14 @@
+name: spam-classification-env
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pip
+  - pip:
+      - dagshub
+      - matplotlib
+      - mlflow==2.14.1
+      - numpy
+      - pandas
+      - scikit-learn
+      - seaborn
