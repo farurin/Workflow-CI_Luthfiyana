@@ -49,19 +49,16 @@ jobs:
           MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_TOKEN }}
           MLFLOW_TRACKING_URI: https://dagshub.com/farurin/Eksperimen_SML_Luthfiyana.mlflow
         run: |
-          # Ambil Run ID dari file yang dibuat oleh modelling.py
-          RUN_ID=$(cat MLProject/run_id.txt)
-          echo "Detected Run ID: $RUN_ID"
+          # Ambil Run ID langsung dari DagsHub menggunakan Python
+          RUN_ID=$(python -c "import mlflow; mlflow.set_tracking_uri('$MLFLOW_TRACKING_URI'); runs = mlflow.search_runs(experiment_names=['Spam Filter Experiments'], order_by=['start_time DESC'], max_results=1); print(runs.iloc[0].run_id)")
 
-          # Nama Image (Format: username/nama-image:tag)
+          echo "Detected Run ID from DagsHub: $RUN_ID"
+
+          # Nama Image
           IMAGE_NAME="${{ secrets.DOCKER_USERNAME }}/spam-classifier:latest"
 
-          # Perintah MLflow untuk membuat Docker Image dari Model
-          # -m: Lokasi model (runs:/<id>/model)
-          # -n: Nama image hasil build
-          # --enable-mlserver: Mengaktifkan MLServer dalam image
+          # Build Docker Image
           mlflow models build-docker -m "runs:/$RUN_ID/model" -n "$IMAGE_NAME"
 
           # Push ke Docker Hub
-          echo "Pushing image to Docker Hub..."
           docker push "$IMAGE_NAME"
