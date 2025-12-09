@@ -102,6 +102,12 @@ with mlflow.start_run(run_name="Advanced Tuning NB"):
     print("Logging Model...")
     mlflow.sklearn.log_model(best_model, "model")
     
+    # Simpan Run ID
+    run_id = mlflow.active_run().info.run_id
+    print(f"Run ID: {run_id}")
+    with open("latest_run_id.txt", "w") as f:
+        f.write(run_id)
+
     print("Training Selesai! Cek DagsHub.")
     
     # Bersihkan file lokal
