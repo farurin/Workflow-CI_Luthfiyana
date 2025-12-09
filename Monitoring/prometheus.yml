@@ -1,0 +1,9 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: "spam_model_monitoring"
+    metrics_path: /
+    static_configs:
+      # Gunakan host.docker.internal agar container bisa baca metrics dari laptop
+      - targets: ["host.docker.internal:8000"]
