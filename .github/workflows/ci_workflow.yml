@@ -51,14 +51,16 @@ jobs:
         run: |
           # Ambil Run ID langsung dari DagsHub menggunakan Python
           RUN_ID=$(python -c "import mlflow; mlflow.set_tracking_uri('$MLFLOW_TRACKING_URI'); runs = mlflow.search_runs(experiment_names=['Spam Filter Experiments'], order_by=['start_time DESC'], max_results=1); print(runs.iloc[0].run_id)")
+          echo "Detected Run ID: $RUN_ID"
 
-          echo "Detected Run ID from DagsHub: $RUN_ID"
+          # Fis Bug Docker: Upgrade MLflow sebelum build docker
+          pip install --upgrade mlflow
 
           # Nama Image
           IMAGE_NAME="${{ secrets.DOCKER_USERNAME }}/spam-classifier:latest"
 
           # Build Docker Image
-          mlflow models build-docker -m "runs:/$RUN_ID/model" -n "$IMAGE_NAME"
+          mlflow models build-docker -m "runs:/$RUN_ID/model" -n "$IMAGE_NAME" --enable-mlserver
 
           # Push ke Docker Hub
           docker push "$IMAGE_NAME"
