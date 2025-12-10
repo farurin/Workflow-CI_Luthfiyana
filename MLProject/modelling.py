@@ -50,7 +50,7 @@ param_grid = {
 }
 
 # Auto logging dengan mlflow
-mlflow.autolog()
+mlflow.autolog(log_models=False, exclusive=False)
 
 print("Memulai Hyperparameter Tuning...")
 with mlflow.start_run(run_name="Advanced Tuning NB"):
@@ -60,28 +60,10 @@ with mlflow.start_run(run_name="Advanced Tuning NB"):
     grid_search.fit(X_train, y_train)
     
     best_model = grid_search.best_estimator_
-    best_params = grid_search.best_params_
     
-    print(f"Best Params: {best_params}")
-    mlflow.log_params(best_params)
-    
-    # Evaluasi
     y_pred = best_model.predict(X_test)
     
-    acc = accuracy_score(y_test, y_pred)
-    prec = precision_score(y_test, y_pred)
-    rec = recall_score(y_test, y_pred)
-    
-    print(f"Results -> Accuracy: {acc:.4f}, Precision: {prec:.4f}, Recall: {rec:.4f}")
-    
-    mlflow.log_metrics({
-        "accuracy": acc,
-        "precision": prec,
-        "recall": rec
-    })
-    
     # Log Artifacts
-    
     # Artifact 1: Confusion Matrix
     print("Generating Confusion Matrix...")
     plt.figure(figsize=(6,5))
