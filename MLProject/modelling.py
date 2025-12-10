@@ -101,6 +101,10 @@ with mlflow.start_run(run_name="Advanced Tuning NB"):
     X_test.head(10).to_frame().to_csv(sample_path, index=False)
     mlflow.log_artifact(sample_path)
     
+    # Log Model Sklearn
+    print("Logging Model...")
+    mlflow.sklearn.log_model(best_model, "model")
+    
     # Simpan Run ID
     run_id = mlflow.active_run().info.run_id
     print(f"Run ID: {run_id}")
