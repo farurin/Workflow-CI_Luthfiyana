@@ -49,6 +49,9 @@ param_grid = {
     'nb__alpha': [0.1, 0.5, 1.0]
 }
 
+# Auto logging dengan mlflow
+mlflow.autolog()
+
 print("Memulai Hyperparameter Tuning...")
 with mlflow.start_run(run_name="Advanced Tuning NB"):
     
@@ -97,10 +100,6 @@ with mlflow.start_run(run_name="Advanced Tuning NB"):
     sample_path = "sample_test_data.csv"
     X_test.head(10).to_frame().to_csv(sample_path, index=False)
     mlflow.log_artifact(sample_path)
-    
-    # Log Model Sklearn
-    print("Logging Model...")
-    mlflow.sklearn.log_model(best_model, "model")
     
     # Simpan Run ID
     run_id = mlflow.active_run().info.run_id
